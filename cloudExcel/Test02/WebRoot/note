@@ -1,0 +1,76 @@
+
+ CRM
+ 
+1.将html页面改为jsp页面
+
+2.创建表结构，创建数据库
+
+3.创建vo包，创建util包
+
+4.创建dao和dao.impl包
+
+5.创建base包
+
+6.创建service包和service.impl包
+
+7.配置web.xml
+
+String 和StringBuffer的区别
+	String 不是简单类型，而是一个类，它被用来表示字符序列。字符本身符合 Unicode 标准，其初始化方式有两种。
+	如：String greeting=“Good Morning! \n”;
+	String greeting=new String(=“Good Morning! \n”);
+	String的特点是一旦赋值，便不能更改其指向的字符对象，如果更改，则会指向一个新的字符对象 。
+	
+	StringBuffer是一个具有对象引用传递特点的字符串对象。
+	StringBuffer对象可以调用其方法动态的进行增加、插入、修改和删除操作，且不用像数组那样事先指定大小，从而实现多次插入字符，一次整体取出的效果，因而操作字符串非常灵活方便。
+	一旦通过StringBuffer生成最终想要的字符串，就可调用它的toString方法将其转换为一个String对象
+	
+快捷键：
+    ctrl + shift + R ：打开资源
+    ctrl + E : 快速转换编辑器
+    alt + shift + R : 重命名
+    shift + Enter : 在当前行之下创建一个新行，光标移动到新行首
+    alt + 方向键 : 将当前行上移或者下移
+    ctrl + 1 : 下一个错误及快快速修改
+    
+List list = new Arraylist();
+	Arraylist这个类实现了List这个接口 
+	所以可以写成List list=new ArrayList()至于这么写的好处就是，
+	令你的代码将来易于维护，比如说后来你发现你的list可能用链表实现会更好只
+	需要改成List list=new LinkedList()就行了
+ 
+ 
+ 
+ 
+ 问题：
+ 1.键盘事件不起作用？？？？tb1.jsp
+ 2.无法给新增元素加事件
+ 
+ 
+ 客户名称： class----px    <input type="text" value="" class="px" >
+ 预计金额：class----px    <input type="text" value="" class="px" >
+ 公司地址： class----px			<input type="text" value="" class="px" >
+ 联系方式：<textarea class="pt" ></textarea>
+ 备注：  <div class="simditor-body" contenteditable="true">
+	      <p>
+	      	<br>
+	      </p>
+     </div>
+ <button type="button" class="pn" >保存</button>
+ <button type="button" class="pn pn_normal" >取消</button>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 	
+	
+	
+	
