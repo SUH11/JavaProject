@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!-- 命名空间 -->
+    <typeAliases>
+        <typeAlias type="cn.edu.ccu.model.srolecourse.SroleCourse" alias="SroleCourse"></typeAlias>
+        <typeAlias type="cn.edu.ccu.model.course.CourseModel1" alias="CourseModel1"></typeAlias>
+        <typeAlias type="cn.edu.ccu.model.course.CourseTypeModel" alias="CourseTypeModel"></typeAlias>
+    </typeAliases>
+
+    <!-- 映射map -->
+    <mappers>
+    </mappers>
+</configuration>

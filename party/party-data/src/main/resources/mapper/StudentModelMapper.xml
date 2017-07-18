@@ -1,0 +1,566 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.edu.ccu.data.student.StudentModelMapper" >
+  <resultMap id="BaseResultMap" type="cn.edu.ccu.model.student.StudentModel" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="account" property="account" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="gender" property="gender" jdbcType="BIT" />
+    <result column="birthday" property="birthday" jdbcType="TIMESTAMP" />
+    <result column="nation_id" property="nationId" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="area_code" property="areaCode" jdbcType="VARCHAR" />
+    <result column="login_fail_count" property="loginFailCount" jdbcType="INTEGER" />
+    <result column="last_login_ip" property="lastLoginIp" jdbcType="VARCHAR" />
+    <result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="last_modify_time" property="lastModifyTime" jdbcType="TIMESTAMP" />
+    <result column="id_card" property="idCard" jdbcType="VARCHAR" />
+    <result column="branch_id" property="branchId" jdbcType="INTEGER" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="introducer" property="introducer" jdbcType="VARCHAR" />
+    <result column="key_active_member_time" property="keyActiveMemberTime" jdbcType="TIMESTAMP" />
+    <result column="probationary_member_time" property="probationaryMemberTime" jdbcType="TIMESTAMP" />
+    <result column="card_carrying_member_time" property="cardCarryingMemberTime" jdbcType="TIMESTAMP" />
+    <result column="student_code" property="studentCode" jdbcType="VARCHAR" />
+    <result column="login_count" property="loginCount" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="TINYINT" />
+    <result column="class_id" property="classId" jdbcType="INTEGER"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, account, password, name, gender, birthday, nation_id, status, area_code, login_fail_count, 
+    last_login_ip, last_login_time, create_time, last_modify_time, id_card, branch_id, 
+    phone, introducer, key_active_member_time, probationary_member_time, card_carrying_member_time, 
+    student_code, login_count,type,class_id
+  </sql>
+
+    <resultMap extends="BaseResultMap" id="baseWithRole" type="cn.edu.ccu.model.student.StudentModel">
+        <association property="sRoleModel" javaType="cn.edu.ccu.model.student.SRoleModel">
+            <id column="role_id" property="roleId" />
+            <result column="role_name" property="name" />
+        </association>
+
+        <association property="areaModel" javaType="cn.edu.ccu.model.common.AreaModel">
+            <result column="area_code_1" property="code" />
+            <result column="area_name" property="name" />
+        </association>
+        <association property="cityModel" javaType="cn.edu.ccu.model.common.CityModel">
+            <result column="city_code" property="code" />
+            <result column="city_name" property="name" />
+        </association>
+        <association property="provinceModel" javaType="cn.edu.ccu.model.common.ProvinceModel">
+            <result column="province_code" property="code" />
+            <result column="province_name" property="name" />
+        </association>
+
+        <association property="nationModel" javaType="cn.edu.ccu.model.common.NationModel">
+            <id column="nation_id" property="id" />
+            <result column="nation_name" property="nation" />
+        </association>
+
+        <association property="branchModel" javaType="cn.edu.ccu.model.common.BranchModel">
+            <id column="branch_id" property="id" />
+            <result column="branch_name" property="name" />
+        </association>
+        <association property="departmentModel" javaType="cn.edu.ccu.model.common.DepartmentModel">
+            <id column="department_id" property="id" />
+            <result column="department_name" property="name" />
+        </association>
+
+        <association property="xiModel" javaType="cn.edu.ccu.model.common.XiModel">
+            <id column="xi_id" property="id" />
+            <result column="xi_name" property="name" />
+        </association>
+        <association property="classModel" javaType="cn.edu.ccu.model.common.ClassModel">
+            <id column="class_id" property="id" />
+            <result column="class_name" property="name" />
+        </association>
+    </resultMap>
+
+
+
+    <select id="selectByKey" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from student
+        where account = #{account,jdbcType=VARCHAR}
+
+        <if test="password != null">
+            AND password = #{password,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <!-- status = -3 学生为未认证学生 可以忽略-->
+    <select id="selectByStudentCode" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from student
+        where student_code = #{code,jdbcType=VARCHAR} and status != -3
+    </select>
+
+    <select id="selectDetail"  resultMap="baseWithRole" parameterType="java.lang.Integer">
+        SELECT
+        s.id, s.account, s.name,s.phone,s.id_card, s.gender, s.birthday, s.nation_id, s.last_login_time, s.status,s.area_code, s.student_code,
+        s.create_time,s.last_login_time,
+        s.introducer, s.key_active_member_time, s.probationary_member_time, s.card_carrying_member_time,s.type,s.class_id,
+        sr.role_id,sr.name role_name,
+        n.id nation_id,n.nation nation_name,
+        a.code area_code_1,a.name area_name,
+        c.code city_code,c.name city_name,
+        p.code province_code,p.name province_name,
+        b.`id` branch_id,b.`name` branch_name,
+        d.`id` department_id, d.`name` department_name,
+        x.id xi_id,x.name xi_name,
+        cls.id class_id,cls.name class_name
+        FROM student s LEFT JOIN `r_student_role` rsr ON rsr.`student_id`=s.`id`
+        LEFT JOIN `s_role` sr ON sr.`role_id`=rsr.`role_id`
+        LEFT JOIN `nation` n ON n.`id`=s.`nation_id`
+        LEFT JOIN `area` a ON a.`code`=s.`area_code`
+        LEFT JOIN `city` c ON c.`code`=a.`citycode`
+        LEFT JOIN `province` p ON p.`code`=c.`provincecode`
+        LEFT JOIN `branch` b ON b.`id`=s.`branch_id`
+        LEFT JOIN `department` d ON d.`id` = b.`department_id`
+        LEFT JOIN `class` cls ON cls.`id` = s.`class_id`
+        LEFT JOIN `xi` x ON x.`id` = cls.`xi_id`
+        WHERE s.id = #{id}
+    </select>
+    <select id="select" parameterType="Map" resultMap="baseWithRole">
+        SELECT
+        s.id, s.account, s.name, s.phone,s.id_card, s.gender, s.birthday, s.nation_id, s.last_login_time, s.status,s.area_code, s.student_code,
+        s.introducer, s.key_active_member_time, s.probationary_member_time, s.card_carrying_member_time,s.type,
+        sr.role_id,sr.name role_name,
+        n.id nation_id,n.nation nation_name,
+        a.code area_code_1,a.name area_name,
+        c.code city_code,c.name city_name,
+        p.code province_code,p.name province_name,
+        b.`id` branch_id,b.`name` branch_name,
+        d.`id` department_id, d.`name` department_name,
+        x.id xi_id,x.name xi_name,
+        cls.id class_id,cls.name class_name
+        FROM student s LEFT JOIN `r_student_role` rsr ON rsr.`student_id`=s.`id`
+        LEFT JOIN `s_role` sr ON sr.`role_id`=rsr.`role_id`
+        LEFT JOIN `nation` n ON n.`id`=s.`nation_id`
+        LEFT JOIN `area` a ON a.`code`=s.`area_code`
+        LEFT JOIN `city` c ON c.`code`=a.`citycode`
+        LEFT JOIN `province` p ON p.`code`=c.`provincecode`
+        LEFT JOIN `branch` b ON b.`id`=s.`branch_id`
+        LEFT JOIN `department` d ON d.`id` = b.`department_id`
+        LEFT JOIN `class` cls ON cls.`id` = s.`class_id`
+        LEFT JOIN `xi` x ON x.`id` = cls.`xi_id`
+
+        <where>
+            <if test="name != null">
+              and  s.name like concat("%",#{name},"%")
+            </if>
+            <if test="phone != null">
+                and s.phone = #{phone}
+            </if>
+            <if test="srName != null">
+                and sr.name = #{srName}
+            </if>
+            <if test="userId != null">
+                and  s.id = #{userId}
+            </if>
+            <if test="studentCode != null">
+                and  s.student_code = #{studentCode}
+            </if>
+            <if test="roleId != null">
+                and  sr.`role_id` = #{roleId}
+            </if>
+            <if test="gender != null">
+                and s.`gender` = #{gender}
+            </if>
+            <if test="areaCode != null">
+                and  a.`code` = #{areaCode}
+            </if>
+            <if test="cityCode != null">
+                and  c.`code` = #{cityCode}
+            </if>
+            <if test="provinceCode != null">
+                and  p.`code` = #{provinceCode}
+            </if>
+            <if test="nationId != null">
+                and  n.`id` = #{nationId}
+            </if>
+            <if test="branchId != null">
+                and  b.`id` = #{branchId}
+            </if>
+            <if test="departmentId != null">
+                and d.`id` = #{departmentId}
+            </if>
+            <if test="type != null">
+                and s.`type` = #{type}
+            </if>
+            <if test="classId != null">
+                and cls.`id` = #{classId}
+            </if>
+            <if test="xiId != null">
+                and x.`id` = #{xiId}
+            </if>
+            <if test="status != null">
+                and s.`status` = #{status}
+            </if>
+        </where>
+        order by student_code
+        <if test="rowStart != null and rowCount != null">
+            LIMIT #{rowStart}, #{rowCount}
+        </if>
+    </select>
+    <select id="count" parameterType="Map" resultType="int">
+        select
+        count(1)
+        FROM student s LEFT JOIN `r_student_role` rsr ON rsr.`student_id`=s.`id`
+        LEFT JOIN `nation` n ON n.`id`=s.`nation_id`
+        LEFT JOIN `area` a ON a.`code`=s.`area_code`
+        LEFT JOIN `city` c ON c.`code`=a.`citycode`
+        LEFT JOIN `province` p ON p.`code`=c.`provincecode`
+        LEFT JOIN `branch` b ON b.`id`=s.`branch_id`
+        LEFT JOIN `department` d ON d.`id` = b.`department_id`
+        LEFT JOIN `class` cls ON cls.`id` = s.`class_id`
+        LEFT JOIN `xi` x ON x.`id` = cls.`xi_id`
+
+        <where>
+            <if test="name != null">
+                and  s.name like concat("%",#{name},"%")
+            </if>
+            <if test="userId != null">
+                and  s.id = #{userId}
+            </if>
+            <if test="studentCode != null">
+                and s.student_code = #{studentCode}
+            </if>
+            <if test="roleId != null">
+                and  rsr.`role_id` = #{roleId}
+            </if>
+            <if test="gender != null">
+                and  s.`gender` = #{gender}
+            </if>
+            <if test="areaCode != null">
+                and a.`code` = #{areaCode}
+            </if>
+            <if test="cityCode != null">
+                and c.`code` = #{cityCode}
+            </if>
+            <if test="provinceCode != null">
+                and  p.`code` = #{provinceCode}
+            </if>
+            <if test="nationId != null">
+                and  n.`id` = #{nationId}
+            </if>
+            <if test="branchId != null">
+                and  b.`id` = #{branchId}
+            </if>
+            <if test="departmentId != null">
+                and d.`id` = #{departmentId}
+            </if>
+            <if test="type != null">
+                and s.`type` = #{type}
+            </if>
+            <if test="classId != null">
+                and cls.`id` = #{classId}
+            </if>
+            <if test="xiId != null">
+                and x.`id` = #{xiId}
+            </if>
+            <if test="status != null">
+                and s.`status` = #{status}
+            </if>
+        </where>
+    </select>
+
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from student
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from student
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.edu.ccu.model.student.StudentModel" >
+    insert into student (id, account, password, 
+      name, gender, birthday, 
+      nation_id, status, area_code, 
+      login_fail_count, last_login_ip, last_login_time, 
+      create_time, last_modify_time, id_card, 
+      branch_id, phone, introducer, 
+      key_active_member_time, probationary_member_time, 
+      card_carrying_member_time, student_code, 
+      login_count,type,class_id)
+    values (#{id,jdbcType=INTEGER}, #{account,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{gender,jdbcType=BIT}, #{birthday,jdbcType=TIMESTAMP}, 
+      #{nationId,jdbcType=INTEGER}, #{status,jdbcType=TINYINT}, #{areaCode,jdbcType=VARCHAR}, 
+      #{loginFailCount,jdbcType=INTEGER}, #{lastLoginIp,jdbcType=VARCHAR}, #{lastLoginTime,jdbcType=TIMESTAMP}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{lastModifyTime,jdbcType=TIMESTAMP}, #{idCard,jdbcType=VARCHAR}, 
+      #{branchId,jdbcType=INTEGER}, #{phone,jdbcType=VARCHAR}, #{introducer,jdbcType=VARCHAR}, 
+      #{keyActiveMemberTime,jdbcType=TIMESTAMP}, #{probationaryMemberTime,jdbcType=TIMESTAMP}, 
+      #{cardCarryingMemberTime,jdbcType=TIMESTAMP}, #{studentCode,jdbcType=VARCHAR}, 
+      #{loginCount,jdbcType=INTEGER},#{type},#{classId})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.edu.ccu.model.student.StudentModel" useGeneratedKeys="true" keyProperty="id">
+    insert into student
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="account != null" >
+        account,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="gender != null" >
+        gender,
+      </if>
+      <if test="birthday != null" >
+        birthday,
+      </if>
+      <if test="nationId != null" >
+        nation_id,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="areaCode != null" >
+        area_code,
+      </if>
+      <if test="loginFailCount != null" >
+        login_fail_count,
+      </if>
+      <if test="lastLoginIp != null" >
+        last_login_ip,
+      </if>
+      <if test="lastLoginTime != null" >
+        last_login_time,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="lastModifyTime != null" >
+        last_modify_time,
+      </if>
+      <if test="idCard != null" >
+        id_card,
+      </if>
+      <if test="branchId != null" >
+        branch_id,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="introducer != null" >
+        introducer,
+      </if>
+      <if test="keyActiveMemberTime != null" >
+        key_active_member_time,
+      </if>
+      <if test="probationaryMemberTime != null" >
+        probationary_member_time,
+      </if>
+      <if test="cardCarryingMemberTime != null" >
+        card_carrying_member_time,
+      </if>
+      <if test="studentCode != null" >
+        student_code,
+      </if>
+      <if test="loginCount != null" >
+        login_count,
+      </if>
+        <if test="type != null">
+           type,
+        </if>
+        <if test="classId != null">
+            class_id
+        </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="account != null" >
+        #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null" >
+        #{gender,jdbcType=BIT},
+      </if>
+      <if test="birthday != null" >
+        #{birthday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="nationId != null" >
+        #{nationId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="areaCode != null" >
+        #{areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="loginFailCount != null" >
+        #{loginFailCount,jdbcType=INTEGER},
+      </if>
+      <if test="lastLoginIp != null" >
+        #{lastLoginIp,jdbcType=VARCHAR},
+      </if>
+      <if test="lastLoginTime != null" >
+        #{lastLoginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifyTime != null" >
+        #{lastModifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="idCard != null" >
+        #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="branchId != null" >
+        #{branchId,jdbcType=INTEGER},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="introducer != null" >
+        #{introducer,jdbcType=VARCHAR},
+      </if>
+      <if test="keyActiveMemberTime != null" >
+        #{keyActiveMemberTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="probationaryMemberTime != null" >
+        #{probationaryMemberTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cardCarryingMemberTime != null" >
+        #{cardCarryingMemberTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="studentCode != null" >
+        #{studentCode,jdbcType=VARCHAR},
+      </if>
+      <if test="loginCount != null" >
+        #{loginCount,jdbcType=INTEGER},
+      </if>
+        <if test="type != null">
+           #{type},
+        </if>
+        <if test="classId != null">
+            #{classId}
+        </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.edu.ccu.model.student.StudentModel" >
+    update student
+    <set >
+      <if test="account != null" >
+        account = #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null" >
+        gender = #{gender,jdbcType=BIT},
+      </if>
+      <if test="birthday != null" >
+        birthday = #{birthday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="nationId != null" >
+        nation_id = #{nationId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="areaCode != null" >
+        area_code = #{areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="loginFailCount != null" >
+        login_fail_count = #{loginFailCount,jdbcType=INTEGER},
+      </if>
+      <if test="lastLoginIp != null" >
+        last_login_ip = #{lastLoginIp,jdbcType=VARCHAR},
+      </if>
+      <if test="lastLoginTime != null" >
+        last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifyTime != null" >
+        last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="idCard != null" >
+        id_card = #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="branchId != null" >
+        branch_id = #{branchId,jdbcType=INTEGER},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="introducer != null" >
+        introducer = #{introducer,jdbcType=VARCHAR},
+      </if>
+      <if test="keyActiveMemberTime != null" >
+        key_active_member_time = #{keyActiveMemberTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="probationaryMemberTime != null" >
+        probationary_member_time = #{probationaryMemberTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cardCarryingMemberTime != null" >
+        card_carrying_member_time = #{cardCarryingMemberTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="studentCode != null" >
+        student_code = #{studentCode,jdbcType=VARCHAR},
+      </if>
+      <if test="loginCount != null" >
+        login_count = #{loginCount,jdbcType=INTEGER},
+      </if>
+        <if test="type != null">
+            type = #{type},
+        </if>
+        <if test="classId != null">
+            class_id=#{classId}
+        </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.edu.ccu.model.student.StudentModel" >
+    update student
+    set account = #{account,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      gender = #{gender,jdbcType=BIT},
+      birthday = #{birthday,jdbcType=TIMESTAMP},
+      nation_id = #{nationId,jdbcType=INTEGER},
+      status = #{status,jdbcType=TINYINT},
+      area_code = #{areaCode,jdbcType=VARCHAR},
+      login_fail_count = #{loginFailCount,jdbcType=INTEGER},
+      last_login_ip = #{lastLoginIp,jdbcType=VARCHAR},
+      last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP},
+      id_card = #{idCard,jdbcType=VARCHAR},
+      branch_id = #{branchId,jdbcType=INTEGER},
+      phone = #{phone,jdbcType=VARCHAR},
+      introducer = #{introducer,jdbcType=VARCHAR},
+      key_active_member_time = #{keyActiveMemberTime,jdbcType=TIMESTAMP},
+      probationary_member_time = #{probationaryMemberTime,jdbcType=TIMESTAMP},
+      card_carrying_member_time = #{cardCarryingMemberTime,jdbcType=TIMESTAMP},
+      student_code = #{studentCode,jdbcType=VARCHAR},
+      login_count = #{loginCount,jdbcType=INTEGER},
+      type=#{type},
+      class_id=#{classId}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

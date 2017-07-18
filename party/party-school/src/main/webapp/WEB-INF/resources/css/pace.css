@@ -1,0 +1,108 @@
+/* This is a compiled file, you should be editing the file in the templates directory */
+.pace {
+  -webkit-pointer-events: none;
+  pointer-events: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+.pace-inactive {
+  display: none;
+}
+
+.pace .pace-progress {
+  background: #29d;
+  position: fixed;
+  z-index: 2000;
+  top: 0;
+  left: 0;
+  height: 2px;
+
+  -webkit-transition: width 1s;
+  -moz-transition: width 1s;
+  -o-transition: width 1s;
+  transition: width 1s;
+}
+
+.pace .pace-progress-inner {
+  display: block;
+  position: absolute;
+  right: 0px;
+  width: 100px;
+  height: 100%;
+  box-shadow: 0 0 10px #29d, 0 0 5px #29d;
+  opacity: 1.0;
+  -webkit-transform: rotate(3deg) translate(0px, -4px);
+  -moz-transform: rotate(3deg) translate(0px, -4px);
+  -ms-transform: rotate(3deg) translate(0px, -4px);
+  -o-transform: rotate(3deg) translate(0px, -4px);
+  transform: rotate(3deg) translate(0px, -4px);
+}
+
+.pace .pace-activity {
+  display: block;
+  position: fixed;
+  z-index: 2000;
+  top: 15px;
+  right: 15px;
+  width: 14px;
+  height: 14px;
+  border: solid 2px transparent;
+  border-top-color: #29d;
+  border-left-color: #29d;
+  border-radius: 10px;
+  -webkit-animation: pace-spinner 400ms linear infinite;
+  -moz-animation: pace-spinner 400ms linear infinite;
+  -ms-animation: pace-spinner 400ms linear infinite;
+  -o-animation: pace-spinner 400ms linear infinite;
+  animation: pace-spinner 400ms linear infinite;
+}
+
+@-webkit-keyframes pace-spinner {
+  0% { -webkit-transform: rotate(0deg); transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); transform: rotate(360deg); }
+}
+@-moz-keyframes pace-spinner {
+  0% { -moz-transform: rotate(0deg); transform: rotate(0deg); }
+  100% { -moz-transform: rotate(360deg); transform: rotate(360deg); }
+}
+@-o-keyframes pace-spinner {
+  0% { -o-transform: rotate(0deg); transform: rotate(0deg); }
+  100% { -o-transform: rotate(360deg); transform: rotate(360deg); }
+}
+@-ms-keyframes pace-spinner {
+  0% { -ms-transform: rotate(0deg); transform: rotate(0deg); }
+  100% { -ms-transform: rotate(360deg); transform: rotate(360deg); }
+}
+@keyframes pace-spinner {
+  0% { transform: rotate(0deg); transform: rotate(0deg); }
+  100% { transform: rotate(360deg); transform: rotate(360deg); }
+}
+
+
+
+/* */
+
+#getDiv{  width:130px; height:24px; position:relative; left:1120px; top:-32px;}
+#getDiv a{ font-size:12px; color:#555; border:1px solid #bbbbbb; text-decoration:none; display:inline-block; width:60px; height:24px; line-height:24px; text-align:center; background:#e3e3e3; border-radius:3px;}
+#getDiv a:hover{ color:#000;}
+.inputOption { border:none; }
+.titleList { line-height:1.5; }
+.titleList { line-height:1.5; margin:20px 0; }
+.myTitle{ padding:20px 0;}
+label.label-radio { display:inline;}
+.options { width:100%; line-height:2; border:1px solid #d4d4d4; margin:10px 0 0 20px; padding:10px;}
+.options:hover { border-color:#58a; cursor:pointer;}
+.options input[type=radio],.options input[type=checkbox]{ opacity:1;position:relative; background:none;}
+.options input[type=radio] { vertical-align:middle; }
+/*.container { font:100% / 1.5 '微软雅黑';}*/
+#subjectList { width:24%; float:left; background:#fff; height:calc(100vh - 52px - 70px); overflow:auto;}
+#subject {  float:left; width:calc(100% - 24%); position:relative; height:calc(100vh - 52px - 70px); overflow:auto;}
+.subContainer { width:100%; padding:0;}
+.kindSub{ padding:25px;}
+.list-group-item{ padding:10px 25px; margin:10px; white-space: nowrap; overflow:hidden; text-overflow:ellipsis; cursor:pointer; border:none; border-bottom:1px solid #f1f5fc; }
+.list-group-item:hover { box-shadow:5px 5px 5px -5px #d4d4d4;}
+.wrapBtn { margin-left:50%;}
+.bg{ box-shadow:5px 5px 5px -5px #d4d4d4; }
+/**/
